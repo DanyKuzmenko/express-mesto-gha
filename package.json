@@ -2,7 +2,7 @@
   "name": "server-mesto",
   "version": "1.0.0",
   "description": "[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)\r # Проект Mesto фронтенд + бэкенд",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "app.js",
     "dev": "nodemon",
@@ -26,7 +26,8 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "body-parser": "^1.19.2",
     "express": "^4.17.3",
-    "mongoose": "^6.2.6"
+    "mongoose": "^6.2.7"
   }
 }
