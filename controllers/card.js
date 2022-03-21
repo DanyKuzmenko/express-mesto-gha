@@ -29,11 +29,14 @@ module.exports.deleteCard = (req, res) => {
     .then((card) => res.send({
       name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id,
     }))
-    // eslint-disable-next-line consistent-return
     .catch((err) => {
-      if (err.statusCode === 404 || err.name === 'CastError') {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Передан неккоректный id карточки' });
+      }
+      if (err.statusCode === 404) {
         return res.status(404).send({ message: `Карточка с _id:${req.params.cardId} не найдена` });
       }
+      return res.status(500).send({ message: err.message });
     });
 };
 
