@@ -9,8 +9,9 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400)
       .send({ message: 'Переданы некорректные данные' });
   }
-  return res.status(status)
+  res.status(status)
     .send({ message: err.message });
+  next();
 };
 
 module.exports = errorHandler;
