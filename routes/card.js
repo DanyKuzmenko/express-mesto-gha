@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   celebrate,
-  Joi,
+  Joi, Segments,
 } = require('celebrate');
 
 const router = express.Router();
@@ -16,8 +16,20 @@ router.post('/cards', celebrate({
     link: Joi.string().required(),
   }),
 }), createCard);
-router.delete('/cards/:cardId', deleteCard);
-router.put('/cards/:cardId/likes', likeCard);
-router.delete('/cards/:cardId/likes', dislikeCard);
+router.delete('/cards/:cardId', celebrate({
+  [Segments.PARAMS]: {
+    cardId: Joi.string().required().min(24).max(24),
+  },
+}), deleteCard);
+router.put('/cards/:cardId/likes', celebrate({
+  [Segments.PARAMS]: {
+    cardId: Joi.string().required().min(24).max(24),
+  },
+}), likeCard);
+router.delete('/cards/:cardId/likes', celebrate({
+  [Segments.PARAMS]: {
+    cardId: Joi.string().required().min(24).max(24),
+  },
+}), dislikeCard);
 
 module.exports = router;
