@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars,consistent-return
 const errorHandler = (err, req, res, next) => {
   const status = err.statusCode || 500;
   // if (err.name === 'CastError') {
