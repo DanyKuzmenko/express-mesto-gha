@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { errors } = require('celebrate');
+const { errors, celebrate, Joi } = require('celebrate');
 const userRoutes = require('./routes/user');
 const cardRoutes = require('./routes/card');
 const { login, createUser } = require('./controllers/user');
@@ -13,8 +13,20 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().messages({
+      'string.empty': '{#label} не может быть пустой строкой',
+    }),
+    password: Joi.string().required().min(8),
+  }),
+}), login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required().min(8),
+  }),
+}), createUser);
 
 app.use(auth);
 
