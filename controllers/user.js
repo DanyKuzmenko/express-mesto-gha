@@ -52,7 +52,7 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new ErrorConflict('Произошел конфликт');
+        throw new ErrorConflict('Пользователь с таким email уже существует');
       }
       return bcrypt.hash(password, 10);
     })
@@ -63,14 +63,12 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => User.findOne({ email: user.email }))
     .then((user) => res.send({
       name: user.name,
       about: user.about,
       avatar: user.avatar,
       _id: user._id,
       email: user.email,
-      password: user.password,
     }))
     .catch(next);
 };

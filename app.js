@@ -5,7 +5,7 @@ const userRoutes = require('./routes/user');
 const cardRoutes = require('./routes/card');
 const { login, createUser } = require('./controllers/user');
 const auth = require('./middlewares/auth');
-const errorHandler = require('./errors/errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
 
 const { PORT = 3000 } = process.env;
 
@@ -25,7 +25,7 @@ app.post('/signup', celebrate({
     password: Joi.string().required().min(8),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/http(s)?:\/\/\S+[^\s]/),
+    avatar: Joi.string().regex(/http(s)?:\/\/\S+[^\s]\.\S+/),
   }),
 }), createUser);
 

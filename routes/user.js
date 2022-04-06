@@ -28,7 +28,7 @@ router.patch('/users/me', celebrate({
 }), updateUser);
 router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().regex(/http(s)?:\/\/\S+[^\s]/),
+    avatar: Joi.string().required().regex(/http(s)?:\/\/\S+[^\s]\.\S+/),
   }),
 }), updateAvatar);
 
