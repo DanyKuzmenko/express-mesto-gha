@@ -18,7 +18,7 @@ router.post('/cards', celebrate({
 }), createCard);
 router.delete('/cards/:cardId', celebrate({
   [Segments.PARAMS]: {
-    cardId: Joi.string().required().hex(),
+    cardId: Joi.string().required().hex().length(24),
   },
 }), deleteCard);
 router.put('/cards/:cardId/likes', celebrate({
