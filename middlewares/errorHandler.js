@@ -1,17 +1,8 @@
 const errorHandler = (err, req, res, next) => {
   const status = err.statusCode || 500;
-  const BAD_REQUEST = 400;
-
-  if (err.name === 'ValidationError') {
-    return res.status(BAD_REQUEST)
-      .send({ message: 'Переданы некорректные данные при создании пользователя' });
-  }
-  if (err.name === 'CastError') {
-    return res.status(BAD_REQUEST)
-      .send({ message: 'Передан невалидный id карточки' });
-  }
+  const message = status === 500 ? 'На сервере произошла ошибка' : err.message;
   res.status(status)
-    .send({ message: err.message });
+    .send({ message });
   return next();
 };
 

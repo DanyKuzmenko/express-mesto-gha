@@ -16,9 +16,9 @@ const {
 router.get('/users', getUsers);
 router.get('/users/me', getCurrentUser);
 router.get('/users/:userId', celebrate({
-  [Segments.PARAMS]: {
-    userId: Joi.string().required().min(24).max(24),
-  },
+  [Segments.PARAMS]: Joi.object().keys({
+    userId: Joi.string().required().hex(),
+  }),
 }), getUser);
 router.patch('/users/me', celebrate({
   body: Joi.object().keys({
