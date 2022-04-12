@@ -6,12 +6,15 @@ const cardRoutes = require('./routes/card');
 const { login, createUser } = require('./controllers/user');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./errors/errorHandler');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
 app.use(express.json());
+
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -33,6 +36,8 @@ app.use(auth);
 
 app.use(userRoutes);
 app.use(cardRoutes);
+
+app.use(errorLogger);
 
 app.use(errors());
 app.use(errorHandler);
