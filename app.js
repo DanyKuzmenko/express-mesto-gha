@@ -8,6 +8,7 @@ const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 const ErrorNotFound = require('./errors/ErrorNotFound');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { cors } = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 
@@ -16,6 +17,8 @@ const app = express();
 app.use(express.json());
 
 app.use(requestLogger);
+
+app.use(cors());
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
