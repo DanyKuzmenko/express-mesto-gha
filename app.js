@@ -5,7 +5,8 @@ const userRoutes = require('./routes/user');
 const cardRoutes = require('./routes/card');
 const { login, createUser } = require('./controllers/user');
 const auth = require('./middlewares/auth');
-const errorHandler = require('./errors/errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
+const ErrorNotFound = require('./errors/ErrorNotFound');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
@@ -28,7 +29,7 @@ app.post('/signup', celebrate({
     password: Joi.string().required().min(8),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/http(s)?:\/\/\S+[^\s]/),
+    avatar: Joi.string().regex(/http(s)?:\/\/\S+[^\s]\.\S+/),
   }),
 }), createUser);
 
@@ -39,6 +40,10 @@ app.use(cardRoutes);
 
 app.use(errorLogger);
 
+app.use((req, res, next) => {
+  next(new ErrorNotFound('Введен неправильный путь'));
+});
+
 app.use(errors());
 app.use(errorHandler);
 
@@ -46,11 +51,5 @@ async function main() {
   await mongoose.connect('mongodb://localhost:27017/mestodb');
   app.listen(PORT);
 }
-
-app.use((req, res, next) => {
-  res.status(404).send({ message: 'Введен неправильный путь' });
-
-  next();
-});
 
 main();

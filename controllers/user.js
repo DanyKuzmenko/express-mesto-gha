@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const ErrorNotFound = require('../errors/ErrorNotFound');
 const ErrorConflict = require('../errors/ErrorConflict');
+const ErrorBadRequest = require('../errors/ErrorBadRequest');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -25,7 +26,13 @@ module.exports.getUser = (req, res, next) => {
         _id: user._id,
       });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new ErrorBadRequest('Передан неккоректный id пользователя'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
@@ -52,7 +59,7 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new ErrorConflict('Произошел конфликт');
+        throw new ErrorConflict('Пользователь с таким email уже существует');
       }
       return bcrypt.hash(password, 10);
     })
@@ -63,16 +70,20 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => User.findOne({ email: user.email }))
     .then((user) => res.send({
       name: user.name,
       about: user.about,
       avatar: user.avatar,
       _id: user._id,
       email: user.email,
-      password: user.password,
     }))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ErrorBadRequest('Переданы некорректные данные при создании пользователя'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -95,7 +106,13 @@ module.exports.updateUser = (req, res, next) => {
       about: user.about,
       _id: user._id,
     }))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ErrorBadRequest('Переданы некорректные данные при обновлении профиля'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.updateAvatar = (req, res, next) => {
@@ -111,7 +128,13 @@ module.exports.updateAvatar = (req, res, next) => {
       avatar: user.avatar,
       _id: user._id,
     }))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ErrorBadRequest('Переданы некорректные данные при обновлении аватара'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.login = (req, res, next) => {
