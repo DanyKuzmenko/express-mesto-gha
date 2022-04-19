@@ -13,5 +13,5 @@
 `npm run dev` — запускает сервер с hot-reload
 
 ## **Ссылки:**
-Github: https://github.com/DanyKuzmenko
+Github: https://github.com/DanyKuzmenko  
 LinkedIn: https://www.linkedin.com/in/daniil-kuzmenko-30a33822b/
